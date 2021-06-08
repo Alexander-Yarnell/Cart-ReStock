@@ -100,10 +100,11 @@ const Products = (props) => {
   console.log(`Rendering Products ${JSON.stringify(data)}`);
   // Fetch Data
   const addToCart = (e) => {
-    let name = e.target.name;
+    let name = e.target.id;
     let item = items.filter((item) => item.name == name);
     console.log(`add to Cart ${JSON.stringify(item)}`);
     setCart([...cart, ...item]);
+    console.log('ID of Clicked ' + e.target.name);
     //doFetch(query);
   };
   const deleteCartItem = (index) => {
@@ -120,7 +121,7 @@ const Products = (props) => {
       <li key={index}>
         <Image src={photos[index % 4]} width={70} roundedCircle></Image>
         <Button variant="primary" size="large">
-          {item.name}:{item.cost}
+          {item.name}:{item.cost}: {item.instock}
         </Button>
         <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
@@ -166,7 +167,14 @@ const Products = (props) => {
     return newTotal;
   };
   // TODO: implement the restockProducts function
-  const restockProducts = (url) => {};
+  const restockProducts = (url) => {
+    doFetch(url);
+    let newItems = data.map((item) => {
+      let { name, country, cost, instock } = item;
+      return { name, country, cost, instock };
+    });
+    setItems([...items, ...newItems]);
+  };
 
   return (
     <Container>
@@ -205,4 +213,4 @@ const Products = (props) => {
   );
 };
 // ========================================
-ReactDOM.render(<Products />, document.getElementById("root"));
+ReactDOM.render(<Products/> , document.getElementById("root"));
